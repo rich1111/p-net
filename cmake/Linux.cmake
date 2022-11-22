@@ -45,6 +45,12 @@ target_sources(profinet
 
 target_compile_options(profinet
   PRIVATE
+        -mips32r2
+        -mtune=24kc
+        -msoft-float
+        -mips16
+        -minterlink-mips16
+        -mno-branch-likely
   -Wall
   -Wextra
   -Werror
@@ -81,6 +87,12 @@ target_sources(pn_dev
 
 target_compile_options(pn_dev
   PRIVATE
+        -mips32r2
+        -mtune=24kc
+        -msoft-float
+        -mips16
+        -minterlink-mips16
+        -mno-branch-likely
   -Wall
   -Wextra
   -Werror
