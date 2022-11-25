@@ -36,7 +36,7 @@
 #include <unistd.h>
 
 #if PNET_MAX_PHYSICAL_PORTS == 1
-#define APP_DEFAULT_ETHERNET_INTERFACE "eth0"
+#define APP_DEFAULT_ETHERNET_INTERFACE "eth0.2"
 #else
 #define APP_DEFAULT_ETHERNET_INTERFACE "br0,eth0,eth1"
 #endif
@@ -317,6 +317,7 @@ void app_set_led (uint16_t id, bool led_state)
     * Profinet communication depending on file system implementation.
     */
 
+#if 0
    char id_str[7] = {0}; /** Terminated string */
    const char * argv[4];
 
@@ -332,6 +333,7 @@ void app_set_led (uint16_t id, bool led_state)
    {
       printf ("Failed to set LED state\n");
    }
+#endif
 }
 
 /** Update configuration with file storage path.
