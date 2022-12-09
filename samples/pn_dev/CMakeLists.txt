@@ -18,4 +18,4 @@ target_include_directories(pn_dev
 
 target_link_libraries (pn_dev PUBLIC profinet)
 
-install (TARGETS pn_dev DESTINATION bin)
+install (TARGETS pn_dev DESTINATION lib)

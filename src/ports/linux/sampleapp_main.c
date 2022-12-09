@@ -58,6 +58,7 @@ app_args_t app_args = {0};
 
 /************************* Utilities ******************************************/
 
+/*
 void show_usage()
 {
    printf ("\nSample application for p-net Profinet device stack.\n");
@@ -120,6 +121,7 @@ void show_usage()
    printf ("\n");
    printf ("p-net revision: " PNET_VERSION "\n");
 }
+ */
 
 /**
  * Parse command line arguments
@@ -128,12 +130,13 @@ void show_usage()
  * @param argv      In: Arguments
  * @return Parsed arguments
  */
-app_args_t parse_commandline_arguments (int argc, char * argv[])
+app_args_t parse_commandline_arguments (/*int argc, char * argv[]*/)
 {
    app_args_t output_arguments = {0};
-   int option;
+   //int option;
 
    /* Special handling of long argument */
+   /*
    if (argc > 1)
    {
       if (strcmp (argv[1], "--help") == 0)
@@ -142,6 +145,7 @@ app_args_t parse_commandline_arguments (int argc, char * argv[])
          exit (EXIT_FAILURE);
       }
    }
+    */
 
    /* Default values */
    strcpy (output_arguments.path_button1, "");
@@ -149,12 +153,13 @@ app_args_t parse_commandline_arguments (int argc, char * argv[])
    strcpy (output_arguments.path_storage_directory, "");
    strcpy (output_arguments.station_name, APP_GSDML_DEFAULT_STATION_NAME);
    strcpy (output_arguments.eth_interfaces, APP_DEFAULT_ETHERNET_INTERFACE);
-   output_arguments.verbosity = 0;
+   output_arguments.verbosity = 4;
    output_arguments.show = 0;
    output_arguments.factory_reset = false;
    output_arguments.remove_files = false;
    output_arguments.mode = MODE_HW_OFFLOAD_NONE;
 
+#if 0
    while ((option = getopt (argc, argv, "hvgfri:s:b:d:p:m:")) != -1)
    {
       switch (option)
@@ -236,6 +241,7 @@ app_args_t parse_commandline_arguments (int argc, char * argv[])
          exit (EXIT_FAILURE);
       }
    }
+#endif
 
    /* Use current directory for storage, if not given */
    if (strlen (output_arguments.path_storage_directory) == 0)
@@ -349,7 +355,7 @@ static int app_pnet_cfg_init_storage (
 {
    strcpy (p_cfg->file_directory, p_args->path_storage_directory);
 
-   if (p_args->verbosity > 0)
+   if (p_args->verbosity >= 0)
    {
       printf ("Storage directory:    %s\n\n", p_cfg->file_directory);
    }
@@ -389,7 +395,8 @@ static int app_pnet_cfg_init_storage (
 
 /****************************** Main ******************************************/
 
-int main (int argc, char * argv[])
+int p_net_app_init ()
+//int main (int argc, char * argv[])
 {
    int ret;
    int32_t app_log_level = APP_LOG_LEVEL_FATAL;
@@ -404,7 +411,7 @@ int main (int argc, char * argv[])
    setvbuf (stdout, NULL, _IOLBF, 0);
 
    /* Parse and display command line arguments */
-   app_args = parse_commandline_arguments (argc, argv);
+   app_args = parse_commandline_arguments (/*argc, argv*/);
 
    app_log_level = (app_args.verbosity <= APP_LOG_LEVEL_FATAL)
                       ? APP_LOG_LEVEL_FATAL - app_args.verbosity

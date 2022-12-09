@@ -168,7 +168,8 @@ configure_file (
 # Add platform-dependent targets early, so they can be configured by
 # platform
 add_library(profinet "")
-add_executable(pn_dev "")
+add_library(pn_dev "" pn_dev.h)
+# add_executable(pn_dev "")
 
 if (PNET_OPTION_DRIVER_ENABLE)
   include(${CMAKE_CURRENT_SOURCE_DIR}/src/drivers/drivers.cmake)
