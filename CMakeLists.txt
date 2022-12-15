@@ -168,7 +168,7 @@ configure_file (
 # Add platform-dependent targets early, so they can be configured by
 # platform
 add_library(profinet "")
-add_library(pn_dev "" pn_dev.h)
+add_library(pn_dev "" samples/pn_dev/pn_dev.h samples/pn_dev/pn_dev.c)
 # add_executable(pn_dev "")
 
 if (PNET_OPTION_DRIVER_ENABLE)

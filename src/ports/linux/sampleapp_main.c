@@ -395,7 +395,7 @@ static int app_pnet_cfg_init_storage (
 
 /****************************** Main ******************************************/
 
-int p_net_app_init ()
+int PNDevStartup()
 //int main (int argc, char * argv[])
 {
    int ret;

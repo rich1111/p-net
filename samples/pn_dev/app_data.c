@@ -21,6 +21,7 @@
 #include "osal.h"
 #include "pnal.h"
 #include <pnet_api.h>
+#include <pn_dev.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -102,27 +103,35 @@ uint8_t * app_data_get_input_data (
    uint32_t hostorder_outputfloat_bytes;
    app_echo_data_t * p_echo_inputdata = (app_echo_data_t *)&echo_inputdata;
    app_echo_data_t * p_echo_outputdata = (app_echo_data_t *)&echo_outputdata;
+   PNDevSdk* pn_dev_sdk;
 
    if (size == NULL || iops == NULL)
    {
       return NULL;
    }
 
+   // Profinet device sdk for golang
+   pn_dev_sdk = sdk_get_pointer();
+
    if (
       submodule_id == APP_GSDML_SUBMOD_ID_DIGITAL_IN ||
       submodule_id == APP_GSDML_SUBMOD_ID_DIGITAL_IN_OUT)
    {
-      /* Prepare digital input data
+      if ((pn_dev_sdk != NULL) && (sdk_get_input_data(pn_dev_sdk, inputdata, APP_GSDML_INPUT_DATA_DIGITAL_SIZE) != -1)) {
+         // Got real digital input value!!!
+      } else {
+         /* Prepare digital input data
        * Lowest 7 bits: Counter    Most significant bit: Button
-       */
-      inputdata[0] = counter++;
-      if (button_pressed)
-      {
-         inputdata[0] |= 0x80;
-      }
-      else
-      {
-         inputdata[0] &= 0x7F;
+          */
+         inputdata[0] = counter++;
+         if (button_pressed)
+         {
+            inputdata[0] |= 0x80;
+         }
+         else
+         {
+            inputdata[0] &= 0x7F;
+         }
       }
 
       *size = APP_GSDML_INPUT_DATA_DIGITAL_SIZE;
@@ -168,11 +177,15 @@ int app_data_set_output_data (
    uint16_t size)
 {
    bool led_state;
+   PNDevSdk* pn_dev_sdk;
 
    if (data == NULL)
    {
       return -1;
    }
+
+   // Profinet device sdk for golang
+   pn_dev_sdk = sdk_get_pointer();
 
    if (
       submodule_id == APP_GSDML_SUBMOD_ID_DIGITAL_OUT ||
@@ -180,11 +193,15 @@ int app_data_set_output_data (
    {
       if (size == APP_GSDML_OUTPUT_DATA_DIGITAL_SIZE)
       {
-         memcpy (outputdata, data, size);
+         if ((pn_dev_sdk != NULL) && (sdk_set_output_data(pn_dev_sdk, data, APP_GSDML_OUTPUT_DATA_DIGITAL_SIZE) != -1)) {
+            // Set real digital output value!!!
+         } else {
+            memcpy (outputdata, data, size);
 
-         /* Most significant bit: LED */
-         led_state = (outputdata[0] & 0x80) > 0;
-         app_handle_data_led_state (led_state);
+            /* Most significant bit: LED */
+            led_state = (outputdata[0] & 0x80) > 0;
+            app_handle_data_led_state (led_state);
+         }
 
          return 0;
       }

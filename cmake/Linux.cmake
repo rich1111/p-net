@@ -83,6 +83,7 @@ target_sources(pn_dev
   samples/pn_dev/app_gsdml.c
   samples/pn_dev/app_data.c
   src/ports/linux/sampleapp_main.c
+        samples/pn_dev/pn_dev.c
   )
 
 target_compile_options(pn_dev
